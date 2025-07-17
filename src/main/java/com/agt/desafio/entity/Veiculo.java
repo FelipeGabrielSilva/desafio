@@ -22,19 +22,20 @@ public class Veiculo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "placa")
+    @Column(name = "placa", nullable = false, unique = true, length = 8)
     private String placa;
 
-    @Column(name = "marca")
+    @Column(name = "marca", nullable = false, length = 30)
     private String marca;
 
-    @Column(name = "modelo")
+    @Column(name = "modelo", nullable = false, length = 30)
     private String modelo;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Localizacao status;
 
-    @Column(name = "criado_em")
+    @Column(name = "criado_em", nullable = false)
     @CreationTimestamp
     private Instant criadoEm;
 
