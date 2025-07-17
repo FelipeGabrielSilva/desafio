@@ -16,7 +16,5 @@ public record CriarVeiculoDTO (
 
         @NotBlank(message = "O modelo deve ser informado.")
         @Size(min = 2, max = 20, message = "O modelo deve ter entre 2 e 20 caracteres")
-        String modelo,
-
-        Localizacao status
+        String modelo
         ) {}
