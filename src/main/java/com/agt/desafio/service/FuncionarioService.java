@@ -96,12 +96,14 @@ public class FuncionarioService {
         return funcionarioRepository.save(f);
     }
 
-    public String Deletar(Long id) {
+    public String Deletar(Long id) throws ObjectNotFoundException {
         boolean res = funcionarioRepository.existsById(id);
 
-        if (res) {
-            funcionarioRepository.deleteById(id);
+        if (!res) {
+            throw new ObjectNotFoundException(id, "Veícuilo não encontrado");
         }
+
+        funcionarioRepository.deleteById(id);
 
         return "Funcionário deletado com sucesso.";
     }

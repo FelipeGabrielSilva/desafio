@@ -40,13 +40,13 @@ public class FuncionarioController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Funcionario> patch(@PathVariable("id") Long id, @RequestBody UpdateFuncionarioDTO dto) {
+    public ResponseEntity<Funcionario> patch(@PathVariable("id") Long id, @RequestBody UpdateFuncionarioDTO dto) throws ObjectNotFoundException {
         Funcionario f = funcionarioService.Atualizar(id, dto);
         return ResponseEntity.ok(f);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<String> delete(@PathVariable("id") Long id) throws ObjectNotFoundException {
         return ResponseEntity.ok(funcionarioService.Deletar(id));
     }
 }
