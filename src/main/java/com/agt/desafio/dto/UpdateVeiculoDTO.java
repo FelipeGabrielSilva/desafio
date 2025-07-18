@@ -7,4 +7,5 @@ public record UpdateVeiculoDTO(
         String marca,
         String modelo,
         Localizacao status
-        ) {}
+) {
+}

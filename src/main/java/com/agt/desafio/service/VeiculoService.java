@@ -11,6 +11,7 @@ import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -99,5 +100,13 @@ public class VeiculoService {
         veiculoRepository.deleteById(id);
 
         return "Veículo deletado com sucesso.";
+    }
+
+    public Veiculo BuscarPorPlaca(String placa) throws ObjectNotFoundException {
+        return veiculoRepository.findByPlaca(placa).orElseThrow(() -> new ObjectNotFoundException("Veículo com placa não encontrado.", (Object) placa));
+    }
+
+    public List<Veiculo> ListarPorStatus(Localizacao status) throws ObjectNotFoundException {
+        return veiculoRepository.findByStatus(status).orElseThrow(() -> new ObjectNotFoundException("Não há veículos com o status selecionado.", (Object) status));
     }
 }
