@@ -1,15 +1,19 @@
+/*
 package com.agt.desafio.data;
 
 import com.agt.desafio.dto.CriarFuncionarioDTO;
+import com.agt.desafio.dto.CriarRegistroViagemDTO;
 import com.agt.desafio.dto.CriarVeiculoDTO;
 import com.agt.desafio.enumtype.Categoria;
 import com.agt.desafio.service.FuncionarioService;
+import com.agt.desafio.service.RegistroViagemService;
 import com.agt.desafio.service.VeiculoService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +22,7 @@ import java.util.List;
 @Profile("dev")
 public class DataSeeder {
     @Bean
-    CommandLineRunner initDataBase(FuncionarioService funcionarioService, VeiculoService veiculoService) {
+    CommandLineRunner initDataBase(FuncionarioService funcionarioService, VeiculoService veiculoService, RegistroViagemService registroViagemService) {
         return args -> {
             System.out.println("Iniciando o povoamento do banco de dados com dados de teste...");
 
@@ -96,7 +100,29 @@ public class DataSeeder {
                 veiculoService.Criar(v);
             }
 
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            List<CriarRegistroViagemDTO> viagens = Arrays.asList(
+                    new CriarRegistroViagemDTO("ABC1D23", 1L, sdf.parse("2025-07-01 08:30:00"), "São Paulo - SP", "João, Maria"),
+                    new CriarRegistroViagemDTO("DEF4G56", 2L, sdf.parse("2025-07-02 09:00:00"), "Campinas - SP", "Carlos, Ana"),
+                    new CriarRegistroViagemDTO("GHI7J89", 3L, sdf.parse("2025-07-03 07:45:00"), "Rio de Janeiro - RJ", "Pedro"),
+                    new CriarRegistroViagemDTO("JKL0M12", 4L, sdf.parse("2025-07-04 10:15:00"), "Belo Horizonte - MG", ""),
+                    new CriarRegistroViagemDTO("MNO3P45", 5L, sdf.parse("2025-07-05 11:00:00"), "Vitória - ES", "Marcos, Julia"),
+                    new CriarRegistroViagemDTO("PQR6S78", 6L, sdf.parse("2025-07-06 06:30:00"), "Curitiba - PR", "Roberta"),
+                    new CriarRegistroViagemDTO("STU9V01", 7L, sdf.parse("2025-07-07 13:00:00"), "Florianópolis - SC", ""),
+                    new CriarRegistroViagemDTO("VWX2Y34", 8L, sdf.parse("2025-07-08 14:20:00"), "Porto Alegre - RS", "Eduardo, Camila"),
+                    new CriarRegistroViagemDTO("YZA5B67", 9L, sdf.parse("2025-07-09 12:10:00"), "Brasília - DF", ""),
+                    new CriarRegistroViagemDTO("BCD8E90", 10L, sdf.parse("2025-07-10 15:40:00"), "Goiânia - GO", "Fernando"),
+                    new CriarRegistroViagemDTO("EFG1H23", 11L, sdf.parse("2025-07-11 16:00:00"), "Salvador - BA", "Vanessa, Leandro"),
+                    new CriarRegistroViagemDTO("HIJ4K56", 12L, sdf.parse("2025-07-12 17:30:00"), "Recife - PE", "Tatiane")
+            );
+
+            for (CriarRegistroViagemDTO r : viagens) {
+                registroViagemService.CriarSaida(r);
+            }
+
             System.out.println("Povoamento do banco de dados de funcionário concluído.");
         };
     }
 }
+*/
