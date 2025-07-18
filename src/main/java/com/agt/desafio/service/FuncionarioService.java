@@ -19,12 +19,10 @@ import java.util.Optional;
 
 @Service
 public class FuncionarioService {
-    private FuncionarioRepository funcionarioRepository;
-    private final Validacao validacao;
+    private final FuncionarioRepository funcionarioRepository;
 
     FuncionarioService(FuncionarioRepository f, Validacao v) {
         this.funcionarioRepository = f;
-        this.validacao = v;
     }
 
     @Transactional
@@ -63,14 +61,8 @@ public class FuncionarioService {
         return f;
     }
 
-    public Optional<Funcionario> ListarUm(Long id) throws ObjectNotFoundException {
-        Optional<Funcionario> f = funcionarioRepository.findById(id);
-
-        if (f.isEmpty()) {
-            throw new ObjectNotFoundException(f, "Não foi possível recuperar o funcionário.");
-        }
-
-        return f;
+    public Funcionario ListarUm(Long id) throws ObjectNotFoundException {
+        return funcionarioRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException((Object) id, "Não foi possível recuperar o funcionário."));
     }
 
     public Funcionario Atualizar(Long id, UpdateFuncionarioDTO dto) throws ObjectNotFoundException {
