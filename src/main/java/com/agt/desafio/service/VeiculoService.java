@@ -1,15 +1,18 @@
 package com.agt.desafio.service;
 
 import com.agt.desafio.dto.CriarVeiculoDTO;
+import com.agt.desafio.dto.UpdateVeiculoDTO;
 import com.agt.desafio.entity.Veiculo;
 import com.agt.desafio.enumtype.Localizacao;
 import com.agt.desafio.repository.VeiculoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.coyote.BadRequestException;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VeiculoService {
@@ -22,6 +25,12 @@ public class VeiculoService {
     }
 
     public Veiculo Criar(CriarVeiculoDTO dto) throws BadRequestException {
+        boolean existePlaca = veiculoRepository.existsByPlaca(dto.placa());
+
+        if (existePlaca) {
+            throw new BadRequestException("Veículo com essa placa já cadastrado.");
+        }
+
         Veiculo v = new Veiculo(
                 dto.placa(),
                 dto.marca(),
@@ -29,54 +38,44 @@ public class VeiculoService {
                 Localizacao.NO_PATIO
         );
 
-        boolean res = validacao.VVeiculo(v);
-
-        if (!res) {
-            throw new BadRequestException("Informações para o cadastro de veículo está em falta.");
-        }
-
-        try {
-            veiculoRepository.save(v);
-
-        } catch (Exception e) {
-            return v;
-        }
+        veiculoRepository.save(v);
 
         return v;
     }
 
-    public List<Veiculo> ListarTodos() {
-        List<Veiculo> v = new ArrayList<Veiculo>();
+    public List<Veiculo> ListarTodos() throws ObjectNotFoundException {
+        List<Veiculo> v = veiculoRepository.findAll();
 
-        try {
-            v = veiculoRepository.findAll();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        if (v.isEmpty()) {
+            throw new ObjectNotFoundException(v, "Não foi possível recuperar os registros de veículos.");
         }
 
         return v;
     }
 
-    public Veiculo ListarUm(Long id) {
-        Veiculo v = veiculoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Veículo não encontrado com o ID: " + id));
+    public Optional<Veiculo> ListarUm(Long id) throws ObjectNotFoundException {
+        Optional<Veiculo> v = veiculoRepository.findById(id);
+
+        if (v.isEmpty()) {
+            throw new ObjectNotFoundException(v, "Não foi possível recuperar o veículo.");
+        }
 
         return v;
     }
 
-    public String Atualizar(Long id, CriarVeiculoDTO dto) {
+    public String Atualizar(Long id, UpdateVeiculoDTO dto) throws ObjectNotFoundException {
         Veiculo veiculo = veiculoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Veículo não encontrado com o ID: " + id));
+                .orElseThrow(() -> new ObjectNotFoundException(id, "Veículo não encontrado com o ID: " + id));
 
-        if (dto.placa() != null) {
+        if (dto.placa() != null && !dto.placa().isBlank()) {
             veiculo.setPlaca(dto.placa());
         }
 
-        if (dto.marca() != null) {
+        if (dto.marca() != null && !dto.marca().isBlank()) {
             veiculo.setMarca(dto.marca());
         }
 
-        if (dto.modelo() != null) {
+        if (dto.modelo() != null && !dto.modelo().isBlank()) {
             veiculo.setModelo(dto.modelo());
         }
 
@@ -89,12 +88,15 @@ public class VeiculoService {
         return "Veículo atualizado com sucesso.";
     }
 
-    public String Deletar(Long id) {
+    public String Deletar(Long id) throws ObjectNotFoundException {
         boolean res = veiculoRepository.existsById(id);
 
-        if (res) {
-            veiculoRepository.deleteById(id);
+
+        if (!res) {
+            throw new ObjectNotFoundException(id, "Veícuilo não encontrado");
         }
+
+        veiculoRepository.deleteById(id);
 
         return "Veículo deletado com sucesso.";
     }
