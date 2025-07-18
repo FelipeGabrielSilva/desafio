@@ -17,12 +17,10 @@ import java.util.Optional;
 
 @Service
 public class VeiculoService {
-    private VeiculoRepository veiculoRepository;
-    private Validacao validacao;
+    private final VeiculoRepository veiculoRepository;
 
     VeiculoService(VeiculoRepository v, Validacao va) {
         this.veiculoRepository = v;
-        this.validacao = va;
     }
 
     public Veiculo Criar(CriarVeiculoDTO dto) throws BadRequestException {

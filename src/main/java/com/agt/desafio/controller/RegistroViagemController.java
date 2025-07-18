@@ -17,7 +17,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/viagens")
 public class RegistroViagemController {
-    private RegistroViagemService registroViagemService;
+    private final RegistroViagemService registroViagemService;
 
     RegistroViagemController(RegistroViagemService r) {
         this.registroViagemService = r;

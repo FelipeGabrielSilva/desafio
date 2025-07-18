@@ -17,7 +17,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/veiculos")
 public class VeiculoController {
-    private VeiculoService veiculoService;
+    private final VeiculoService veiculoService;
 
     VeiculoController(VeiculoService v) {
         this.veiculoService = v;

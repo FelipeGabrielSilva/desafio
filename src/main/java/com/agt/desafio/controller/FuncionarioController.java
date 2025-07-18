@@ -17,7 +17,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/funcionario")
 public class FuncionarioController {
-    private FuncionarioService funcionarioService;
+    private final FuncionarioService funcionarioService;
 
     FuncionarioController(FuncionarioService f) {
         this.funcionarioService = f;

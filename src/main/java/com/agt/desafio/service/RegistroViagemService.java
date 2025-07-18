@@ -20,9 +20,9 @@ import java.util.Optional;
 
 @Service
 public class RegistroViagemService {
-    private RegistroViagemRepository registroViagemRepository;
-    private VeiculoService veiculoService;
-    private FuncionarioService funcionarioService;
+    private final RegistroViagemRepository registroViagemRepository;
+    private final VeiculoService veiculoService;
+    private final FuncionarioService funcionarioService;
 
     RegistroViagemService(RegistroViagemRepository reg, VeiculoService veic, FuncionarioService func) {
         this.registroViagemRepository = reg;

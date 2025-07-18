@@ -19,12 +19,10 @@ import java.util.Optional;
 
 @Service
 public class FuncionarioService {
-    private FuncionarioRepository funcionarioRepository;
-    private final Validacao validacao;
+    private final FuncionarioRepository funcionarioRepository;
 
     FuncionarioService(FuncionarioRepository f, Validacao v) {
         this.funcionarioRepository = f;
-        this.validacao = v;
     }
 
     @Transactional
