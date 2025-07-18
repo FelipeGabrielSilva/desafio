@@ -7,4 +7,5 @@ public record UpdateFuncionarioDTO(
         String email,
         String cnh,
         Categoria categoria
-        ) {}
+) {
+}

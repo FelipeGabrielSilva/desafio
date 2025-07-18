@@ -63,14 +63,8 @@ public class FuncionarioService {
         return f;
     }
 
-    public Optional<Funcionario> ListarUm(Long id) throws ObjectNotFoundException {
-        Optional<Funcionario> f = funcionarioRepository.findById(id);
-
-        if (f.isEmpty()) {
-            throw new ObjectNotFoundException(f, "Não foi possível recuperar o funcionário.");
-        }
-
-        return f;
+    public Funcionario ListarUm(Long id) throws ObjectNotFoundException {
+        return funcionarioRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException((Object) id, "Não foi possível recuperar o funcionário."));
     }
 
     public Funcionario Atualizar(Long id, UpdateFuncionarioDTO dto) throws ObjectNotFoundException {

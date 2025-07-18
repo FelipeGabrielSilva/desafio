@@ -35,7 +35,7 @@ public class FuncionarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Funcionario>> getOne(@PathVariable("id") Long id) throws ObjectNotFoundException {
+    public ResponseEntity<Funcionario> getOne(@PathVariable("id") Long id) throws ObjectNotFoundException {
         return ResponseEntity.ok(funcionarioService.ListarUm(id));
     }
 
