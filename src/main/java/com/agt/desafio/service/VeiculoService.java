@@ -8,6 +8,7 @@ import com.agt.desafio.errors.ResourceBadRequestException;
 import com.agt.desafio.errors.ResourceNotFoundException;
 import com.agt.desafio.repository.VeiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,7 +39,8 @@ public class VeiculoService {
     }
 
     public List<Veiculo> ListarTodos() throws ResourceNotFoundException {
-        List<Veiculo> v = veiculoRepository.findAll();
+        String ord = "id";
+        List<Veiculo> v = veiculoRepository.findAll(Sort.by(ord));
 
         if (v.isEmpty()) {
             throw new ResourceNotFoundException("Não foi possível recuperar os registros de veículos.");

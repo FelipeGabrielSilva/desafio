@@ -9,6 +9,7 @@ import com.agt.desafio.repository.FuncionarioRepository;
 import jakarta.transaction.Transactional;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,7 +41,8 @@ public class FuncionarioService {
     }
 
     public List<Funcionario> ListarTodos() {
-        List<Funcionario> f = funcionarioRepository.findAll();
+        String ord = "id";
+        List<Funcionario> f = funcionarioRepository.findAll(Sort.by(ord));
 
         if (f.isEmpty()) {
             throw new ResourceNotFoundException("Não foi possível recuperar os registro de funcionários.");

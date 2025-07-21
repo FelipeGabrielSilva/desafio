@@ -11,6 +11,7 @@ import com.agt.desafio.errors.ResourceConflictException;
 import com.agt.desafio.errors.ResourceNotFoundException;
 import com.agt.desafio.repository.RegistroViagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -58,7 +59,8 @@ public class RegistroViagemService {
     }
 
     public List<RegistroViagem> ListarTodos() throws ResourceNotFoundException {
-        List<RegistroViagem> r = registroViagemRepository.findAll();
+        String ord = "id";
+        List<RegistroViagem> r = registroViagemRepository.findAll(Sort.by(ord));
 
         if (r.isEmpty()) {
             throw new ResourceNotFoundException("Não foi possível recuperar os registros de viagens.");
