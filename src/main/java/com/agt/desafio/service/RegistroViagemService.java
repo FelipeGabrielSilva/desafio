@@ -7,6 +7,9 @@ import com.agt.desafio.entity.Funcionario;
 import com.agt.desafio.entity.RegistroViagem;
 import com.agt.desafio.entity.Veiculo;
 import com.agt.desafio.enumtype.Localizacao;
+import com.agt.desafio.errors.ResourceBadRequestException;
+import com.agt.desafio.errors.ResourceConflictException;
+import com.agt.desafio.errors.ResourceNotFoundException;
 import com.agt.desafio.repository.RegistroViagemRepository;
 import jakarta.validation.constraints.Null;
 import org.apache.coyote.BadRequestException;
@@ -30,12 +33,12 @@ public class RegistroViagemService {
         this.funcionarioService = func;
     }
 
-    public RegistroViagem CriarSaida(CriarRegistroViagemDTO dto) throws BadRequestException {
+    public RegistroViagem CriarSaida(CriarRegistroViagemDTO dto) throws ResourceConflictException {
         Veiculo v = veiculoService.BuscarPorPlaca(dto.placa_veiculo());
         Funcionario f = funcionarioService.ListarUm(dto.id_motorista());
 
         if (v.getStatus() != Localizacao.NO_PATIO) {
-            throw new BadRequestException("O veículo informado não se encontra no pátio.");
+            throw new ResourceConflictException("O veículo informado não se encontra no pátio.");
         }
 
         UpdateVeiculoDTO upv = new UpdateVeiculoDTO(
@@ -60,25 +63,25 @@ public class RegistroViagemService {
         return r;
     }
 
-    public List<RegistroViagem> ListarTodos() {
+    public List<RegistroViagem> ListarTodos() throws ResourceNotFoundException {
         List<RegistroViagem> r = registroViagemRepository.findAll();
 
         if (r.isEmpty()) {
-            throw new ObjectNotFoundException(r, "Não foi possível recuperar os registros de viagens.");
+            throw new ResourceNotFoundException("Não foi possível recuperar os registros de viagens.");
         }
 
         return r;
     }
 
-    public RegistroViagem CriarRetorno(CriarRegistroViagemRetornoDTO dto) throws BadRequestException {
+    public RegistroViagem CriarRetorno(CriarRegistroViagemRetornoDTO dto) throws ResourceConflictException {
         Veiculo v = veiculoService.BuscarPorPlaca(dto.placa());
 
         if (v.getStatus() != Localizacao.EM_VIAGEM) {
-            throw new BadRequestException("O veículo informado não se encontra em viagem.");
+            throw new ResourceConflictException("O veículo informado não se encontra em viagem.");
         }
 
         RegistroViagem resv = registroViagemRepository.findFirstByVeiculoAndRetornoIsNullOrderBySaidaDesc(v)
-                .orElseThrow(() -> new BadRequestException("Não há registro de viagem em aberto para o veículo informado.")
+                .orElseThrow(() -> new ResourceConflictException("Não há registro de viagem em aberto para o veículo informado.")
                 );
 
         UpdateVeiculoDTO upv = new UpdateVeiculoDTO(
@@ -98,11 +101,11 @@ public class RegistroViagemService {
         return resv;
     }
 
-    public String DeletarRegistro(Long id) throws ObjectNotFoundException {
+    public String DeletarRegistro(Long id) throws ResourceNotFoundException {
         boolean existeRegistro = registroViagemRepository.existsById(id);
 
         if (!existeRegistro) {
-            throw new ObjectNotFoundException((Object) id, "O registro de viagem não existe.");
+            throw new ResourceNotFoundException("O registro de viagem não existe.");
         }
 
         registroViagemRepository.deleteById(id);

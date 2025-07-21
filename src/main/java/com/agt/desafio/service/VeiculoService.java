@@ -4,10 +4,10 @@ import com.agt.desafio.dto.CriarVeiculoDTO;
 import com.agt.desafio.dto.UpdateVeiculoDTO;
 import com.agt.desafio.entity.Veiculo;
 import com.agt.desafio.enumtype.Localizacao;
+import com.agt.desafio.errors.ResourceBadRequestException;
+import com.agt.desafio.errors.ResourceNotFoundException;
 import com.agt.desafio.repository.VeiculoRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.apache.coyote.BadRequestException;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,11 +23,11 @@ public class VeiculoService {
         this.veiculoRepository = v;
     }
 
-    public Veiculo Criar(CriarVeiculoDTO dto) throws BadRequestException {
+    public Veiculo Criar(CriarVeiculoDTO dto) throws ResourceBadRequestException {
         boolean existePlaca = veiculoRepository.existsByPlaca(dto.placa());
 
         if (existePlaca) {
-            throw new BadRequestException("Veículo com essa placa já cadastrado.");
+            throw new ResourceBadRequestException("Veículo com essa placa já cadastrado.");
         }
 
         Veiculo v = new Veiculo(
@@ -42,29 +42,29 @@ public class VeiculoService {
         return v;
     }
 
-    public List<Veiculo> ListarTodos() throws ObjectNotFoundException {
+    public List<Veiculo> ListarTodos() throws ResourceNotFoundException {
         List<Veiculo> v = veiculoRepository.findAll();
 
         if (v.isEmpty()) {
-            throw new ObjectNotFoundException(v, "Não foi possível recuperar os registros de veículos.");
+            throw new ResourceNotFoundException("Não foi possível recuperar os registros de veículos.");
         }
 
         return v;
     }
 
-    public Optional<Veiculo> ListarUm(Long id) throws ObjectNotFoundException {
+    public Optional<Veiculo> ListarUm(Long id) throws ResourceNotFoundException {
         Optional<Veiculo> v = veiculoRepository.findById(id);
 
         if (v.isEmpty()) {
-            throw new ObjectNotFoundException(v, "Não foi possível recuperar o veículo.");
+            throw new ResourceNotFoundException("Não foi possível recuperar o veículo.");
         }
 
         return v;
     }
 
-    public String Atualizar(Long id, UpdateVeiculoDTO dto) throws ObjectNotFoundException {
+    public String Atualizar(Long id, UpdateVeiculoDTO dto) throws ResourceNotFoundException {
         Veiculo veiculo = veiculoRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException(id, "Veículo não encontrado com o ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Veículo não encontrado com o ID: " + id));
 
         if (dto.placa() != null && !dto.placa().isBlank()) {
             veiculo.setPlaca(dto.placa());
@@ -87,12 +87,12 @@ public class VeiculoService {
         return "Veículo atualizado com sucesso.";
     }
 
-    public String Deletar(Long id) throws ObjectNotFoundException {
+    public String Deletar(Long id) throws ResourceNotFoundException {
         boolean res = veiculoRepository.existsById(id);
 
 
         if (!res) {
-            throw new ObjectNotFoundException(id, "Veícuilo não encontrado");
+            throw new ResourceNotFoundException("Veículo não encontrado");
         }
 
         veiculoRepository.deleteById(id);
@@ -100,11 +100,11 @@ public class VeiculoService {
         return "Veículo deletado com sucesso.";
     }
 
-    public Veiculo BuscarPorPlaca(String placa) throws ObjectNotFoundException {
-        return veiculoRepository.findByPlaca(placa).orElseThrow(() -> new ObjectNotFoundException("Veículo com placa não encontrado.", (Object) placa));
+    public Veiculo BuscarPorPlaca(String placa) throws ResourceNotFoundException {
+        return veiculoRepository.findByPlaca(placa).orElseThrow(() -> new ResourceNotFoundException("Veículo com placa não encontrado."));
     }
 
-    public List<Veiculo> ListarPorStatus(Localizacao status) throws ObjectNotFoundException {
-        return veiculoRepository.findByStatus(status).orElseThrow(() -> new ObjectNotFoundException("Não há veículos com o status selecionado.", (Object) status));
+    public List<Veiculo> ListarPorStatus(Localizacao status) throws ResourceNotFoundException {
+        return veiculoRepository.findByStatus(status).orElseThrow(() -> new ResourceNotFoundException("Não há veículos com o status selecionado."));
     }
 }

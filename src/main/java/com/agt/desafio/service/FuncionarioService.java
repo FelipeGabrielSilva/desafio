@@ -4,6 +4,8 @@ import com.agt.desafio.dto.CriarFuncionarioDTO;
 import com.agt.desafio.dto.UpdateFuncionarioDTO;
 import com.agt.desafio.entity.Funcionario;
 import com.agt.desafio.enumtype.Categoria;
+import com.agt.desafio.errors.ResourceBadRequestException;
+import com.agt.desafio.errors.ResourceNotFoundException;
 import com.agt.desafio.repository.FuncionarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -26,25 +28,20 @@ public class FuncionarioService {
     }
 
     @Transactional
-    public Funcionario Criar(CriarFuncionarioDTO dto) throws BadRequestException {
+    public Funcionario Criar(CriarFuncionarioDTO dto) throws ResourceBadRequestException {
         boolean existeEmail = funcionarioRepository.existsByEmail(dto.email());
 
         if (existeEmail) {
-            throw new BadRequestException("Funcionário com esse e-mail já cadastrado.");
+            throw new ResourceBadRequestException("Funcionário com esse e-mail já cadastrado.");
         }
 
         boolean existeCnh = funcionarioRepository.existsByCnh(dto.cnh());
 
         if (existeCnh) {
-            throw new BadRequestException("Funcionário com essa CNH já cadastrado.");
+            throw new ResourceBadRequestException("Funcionário com essa CNH já cadastrado.");
         }
 
-        Funcionario f = new Funcionario(
-                dto.nome(),
-                dto.email(),
-                dto.cnh(),
-                dto.categoria()
-        );
+        Funcionario f = new Funcionario(dto.nome(), dto.email(), dto.cnh(), dto.categoria());
 
         funcionarioRepository.save(f);
 
@@ -55,19 +52,18 @@ public class FuncionarioService {
         List<Funcionario> f = funcionarioRepository.findAll();
 
         if (f.isEmpty()) {
-            throw new ObjectNotFoundException(f, "Não foi possível recuperar os registro de funcionários.");
+            throw new ResourceNotFoundException("Não foi possível recuperar os registro de funcionários.");
         }
 
         return f;
     }
 
-    public Funcionario ListarUm(Long id) throws ObjectNotFoundException {
-        return funcionarioRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException((Object) id, "Não foi possível recuperar o funcionário."));
+    public Funcionario ListarUm(Long id) throws ResourceNotFoundException {
+        return funcionarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Não foi possível recuperar o funcionário."));
     }
 
     public Funcionario Atualizar(Long id, UpdateFuncionarioDTO dto) throws ObjectNotFoundException {
-        Funcionario f = funcionarioRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException(id, "Funcionário não encontrado."));
+        Funcionario f = funcionarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Funcionário não encontrado."));
 
         if (dto.nome() != null && !dto.nome().isBlank()) {
             f.setNome(dto.nome());
@@ -88,11 +84,11 @@ public class FuncionarioService {
         return funcionarioRepository.save(f);
     }
 
-    public String Deletar(Long id) throws ObjectNotFoundException {
+    public String Deletar(Long id) throws ResourceNotFoundException {
         boolean res = funcionarioRepository.existsById(id);
 
         if (!res) {
-            throw new ObjectNotFoundException(id, "Veícuilo não encontrado");
+            throw new ResourceNotFoundException("Funcionário não encontrado");
         }
 
         funcionarioRepository.deleteById(id);
