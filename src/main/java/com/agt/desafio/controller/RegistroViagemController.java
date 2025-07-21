@@ -31,7 +31,7 @@ public class RegistroViagemController {
         return ResponseEntity.status(HttpStatus.CREATED).body(HttpStatus.CREATED);
     }
 
-    @GetMapping
+    @GetMapping("/registros")
     public ResponseEntity<List<RegistroViagem>> getAll() throws ResourceNotFoundException {
         return ResponseEntity.ok(registroViagemService.ListarTodos());
     }
