@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface RegistroViagemRepository extends JpaRepository<RegistroViagem, Long> {
-    Optional<RegistroViagem> findFirstByVeiculoAndRetornoIsNullOrderBySaidaDesc (Veiculo veiculo);
+    Optional<RegistroViagem> findFirstByVeiculoAndRetornoIsNullOrderBySaidaDesc(Veiculo veiculo);
 }

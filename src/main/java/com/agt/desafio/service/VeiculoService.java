@@ -7,21 +7,16 @@ import com.agt.desafio.enumtype.Localizacao;
 import com.agt.desafio.errors.ResourceBadRequestException;
 import com.agt.desafio.errors.ResourceNotFoundException;
 import com.agt.desafio.repository.VeiculoRepository;
-import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class VeiculoService {
-    private final VeiculoRepository veiculoRepository;
-
-    VeiculoService(VeiculoRepository v, Validacao va) {
-        this.veiculoRepository = v;
-    }
+    @Autowired
+    private VeiculoRepository veiculoRepository;
 
     public Veiculo Criar(CriarVeiculoDTO dto) throws ResourceBadRequestException {
         boolean existePlaca = veiculoRepository.existsByPlaca(dto.placa());

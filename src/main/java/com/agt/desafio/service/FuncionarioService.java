@@ -3,29 +3,20 @@ package com.agt.desafio.service;
 import com.agt.desafio.dto.CriarFuncionarioDTO;
 import com.agt.desafio.dto.UpdateFuncionarioDTO;
 import com.agt.desafio.entity.Funcionario;
-import com.agt.desafio.enumtype.Categoria;
 import com.agt.desafio.errors.ResourceBadRequestException;
 import com.agt.desafio.errors.ResourceNotFoundException;
 import com.agt.desafio.repository.FuncionarioRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.apache.coyote.BadRequestException;
 import org.hibernate.ObjectNotFoundException;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FuncionarioService {
-    private final FuncionarioRepository funcionarioRepository;
-
-    FuncionarioService(FuncionarioRepository f, Validacao v) {
-        this.funcionarioRepository = f;
-    }
+    @Autowired
+    private FuncionarioRepository funcionarioRepository;
 
     @Transactional
     public Funcionario Criar(CriarFuncionarioDTO dto) throws ResourceBadRequestException {

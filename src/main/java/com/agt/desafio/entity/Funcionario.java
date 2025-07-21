@@ -1,6 +1,5 @@
 package com.agt.desafio.entity;
 
-import ch.qos.logback.core.status.InfoStatus;
 import com.agt.desafio.enumtype.Categoria;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;

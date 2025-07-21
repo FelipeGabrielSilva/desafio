@@ -7,31 +7,25 @@ import com.agt.desafio.entity.Funcionario;
 import com.agt.desafio.entity.RegistroViagem;
 import com.agt.desafio.entity.Veiculo;
 import com.agt.desafio.enumtype.Localizacao;
-import com.agt.desafio.errors.ResourceBadRequestException;
 import com.agt.desafio.errors.ResourceConflictException;
 import com.agt.desafio.errors.ResourceNotFoundException;
 import com.agt.desafio.repository.RegistroViagemRepository;
-import jakarta.validation.constraints.Null;
-import org.apache.coyote.BadRequestException;
-import org.hibernate.ObjectNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RegistroViagemService {
-    private final RegistroViagemRepository registroViagemRepository;
-    private final VeiculoService veiculoService;
-    private final FuncionarioService funcionarioService;
+    @Autowired
+    private RegistroViagemRepository registroViagemRepository;
 
-    RegistroViagemService(RegistroViagemRepository reg, VeiculoService veic, FuncionarioService func) {
-        this.registroViagemRepository = reg;
-        this.veiculoService = veic;
-        this.funcionarioService = func;
-    }
+    @Autowired
+    private VeiculoService veiculoService;
+
+    @Autowired
+    private FuncionarioService funcionarioService;
 
     public RegistroViagem CriarSaida(CriarRegistroViagemDTO dto) throws ResourceConflictException {
         Veiculo v = veiculoService.BuscarPorPlaca(dto.placa_veiculo());

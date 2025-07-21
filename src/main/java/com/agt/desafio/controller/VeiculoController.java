@@ -8,7 +8,6 @@ import com.agt.desafio.errors.ResourceBadRequestException;
 import com.agt.desafio.errors.ResourceNotFoundException;
 import com.agt.desafio.service.VeiculoService;
 import jakarta.validation.Valid;
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
