@@ -1,4 +1,3 @@
-/*
 package com.agt.desafio.data;
 
 import com.agt.desafio.dto.CriarFuncionarioDTO;
@@ -125,4 +124,3 @@ public class DataSeeder {
         };
     }
 }
-*/
